@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基金收益可视化</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', path='/img/icons.png') }}" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="fundCode" placeholder="输入基金代码，如: 004898" value="004898">
+            <button id="searchBtn">查询</button>
+        </div>
+
+        <div class="fund-info-card">
+            <div class="fund-header">
+                <div class="fund-title">
+                    <div class="fund-name-container">
+                        <h2 id="fundName">加载中...</h2>
+                        <a id="eastmoneyLink" href="#" target="_blank" class="eastmoney-link" title="在天天基金网查看详情">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    </div>
+                    <p id="fundType">加载中...</p>
+                </div>
+            </div>
+
+            <div class="yield-info">
+                <div class="yield-rate">
+                    <h1 id="yieldRate">--.--%</h1>
+                    <p>自成立以来年化收益率</p>
+                </div>
+                <div class="holding-info">
+                    <p>持有7天后</p>
+                    <p>每日可赎回</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footnote">
+            <p id="investment-footnote">图示为持有10万元在近3个月的收益情况(单位:元)</p>
+        </div>
+
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="history">历史收益表现</button>
+                <button class="tab-btn" data-tab="trend">周收益走势</button>
+                <button class="tab-btn" data-tab="unit">单位净值走势</button>
+            </div>
+
+            <div class="tab-content active" id="history">
+                <div class="history-header">
+                    <h3>成立以来 <span id="weekCount">0</span> 周均为正收益</h3>
+                    <p>产品近<span id="periodText"> </span>平均周收益 <span id="avgWeeklyReturn"> </span>元</p>
+                </div>
+
+                <div class="weekly-returns-container" id="weeklyReturnsContainer">
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="trend">
+                <canvas id="weeklyReturnsChart"></canvas>
+            </div>
+
+            <div class="tab-content" id="unit">
+                <canvas id="netWorthChart"></canvas>
+            </div>
+        </div>
+
+        <div class="historical-data-container">
+            <div class="historical-data-tabs">
+                <button class="historical-tab-btn active" data-tab="historical-performance">历史业绩</button>
+                <button class="historical-tab-btn" data-tab="historical-netvalue">历史净值</button>
+            </div>
+
+            <div class="historical-tab-content active" id="historical-performance">
+                <div class="performance-table">
+                    <div class="performance-row header-row">
+                        <div class="performance-cell">时间区间</div>
+                        <div class="performance-cell">涨跌幅</div>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-cell">近1周</div>
+                        <div class="performance-cell" id="perf-1week">--.--%</div>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-cell">近1月</div>
+                        <div class="performance-cell" id="perf-1month">--.--%</div>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-cell">近3月</div>
+                        <div class="performance-cell" id="perf-3months">--.--%</div>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-cell">近6月</div>
+                        <div class="performance-cell" id="perf-6months">--.--%</div>
+                    </div>
+                    <div class="performance-row">
+                        <div class="performance-cell">近1年</div>
+                        <div class="performance-cell" id="perf-1year">--.--%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="historical-tab-content" id="historical-netvalue">
+                <div class="netvalue-table">
+                    <div class="netvalue-row header-row">
+                        <div class="netvalue-cell">日期</div>
+                        <div class="netvalue-cell">单位净值</div>
+                        <div class="netvalue-cell">日增长率</div>
+                    </div>
+                    <div id="netvalue-data-container">
+                        <div class="loading">加载中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/script.js') }}"></script>
+</body>
+</html>

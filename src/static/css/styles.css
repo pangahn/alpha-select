@@ -1,0 +1,511 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 20px; /* 减少底部空间，因为已移除底部操作栏 */
+}
+
+/* 头部样式 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #1E88E5;
+    color: white;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.back-button svg {
+    margin-right: 5px;
+}
+
+.header-icons svg {
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+/* 搜索容器 */
+.search-container {
+    display: flex;
+    padding: 15px;
+    background-color: #fff;
+    margin: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-container input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.search-container button {
+    padding: 12px 20px;
+    background-color: #1E88E5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.search-container button:hover {
+    background-color: #1976D2;
+}
+
+/* 基金信息卡片 */
+.fund-info-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fund-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.fund-logo {
+    width: 40px;
+    height: 40px;
+    background-color: #1E88E5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.fund-logo img {
+    width: 30px;
+    height: 30px;
+}
+
+.fund-name-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.fund-title h2 {
+    font-size: 18px;
+    margin-bottom: 0;
+    margin-right: 8px;
+}
+
+.eastmoney-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #1E88E5;
+    background-color: #E3F2FD;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.eastmoney-link:hover {
+    background-color: #1E88E5;
+    color: white;
+    transform: scale(1.05);
+}
+
+.fund-title p {
+    font-size: 14px;
+    color: #666;
+    letter-spacing: 0.3px;
+}
+
+.yield-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.yield-rate h1 {
+    font-size: 32px;
+    color: #E53935;
+    margin-bottom: 5px;
+}
+
+.yield-rate p {
+    font-size: 12px;
+    color: #666;
+}
+
+.holding-info {
+    text-align: right;
+}
+
+.holding-info p {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.fund-features {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.feature {
+    background-color: #E3F2FD;
+    color: #1E88E5;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.purchase-info {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 收益摘要 */
+.return-summary {
+    display: flex;
+    background-color: white;
+    margin: 10px 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.return-item {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    border-right: 1px solid #eee;
+}
+
+.return-item:last-child {
+    border-right: none;
+}
+
+.return-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.return-value {
+    font-size: 18px;
+    color: #E53935;
+    font-weight: bold;
+}
+
+/* 标签页 */
+.tab-container {
+    background-color: white;
+    margin: 10px 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: #1E88E5;
+    font-weight: bold;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background-color: #1E88E5;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 历史收益表现 */
+.history-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.history-header h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.history-header p {
+    font-size: 14px;
+    color: #666;
+}
+
+.weekly-returns-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.weekly-return-item {
+    text-align: center;
+    padding: 10px;
+    background-color: #f9fbfc;
+}
+
+.weekly-return-date {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.weekly-return-value {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    grid-column: span 3;
+}
+
+/* 脚注 */
+.footnote {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    color: #999;
+}
+
+/* 底部操作栏 */
+.action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    display: flex;
+    padding: 10px 15px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.action-left {
+    display: flex;
+    align-items: center;
+}
+
+.follow-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.follow-btn svg {
+    margin-right: 5px;
+}
+
+.action-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.purchase-btn {
+    padding: 10px 30px;
+    background-color: #ccc;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: not-allowed;
+}
+
+/* 图表容器 */
+#weeklyReturnsChart, #netWorthChart {
+    width: 100%;
+    height: 300px;
+}
+
+/* 历史数据展示块 */
+.historical-data-container {
+    background-color: white;
+    margin: 10px 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.historical-data-tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+}
+
+.historical-tab-btn {
+    flex: 1;
+    padding: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    position: relative;
+}
+
+.historical-tab-btn.active {
+    color: #1E88E5;
+    font-weight: bold;
+}
+
+.historical-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background-color: #1E88E5;
+}
+
+.historical-tab-content {
+    display: none;
+    padding: 15px;
+}
+
+.historical-tab-content.active {
+    display: block;
+}
+
+/* 历史业绩表格 */
+.performance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.performance-row {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.performance-row:last-child {
+    border-bottom: none;
+}
+
+.performance-row.header-row {
+    font-weight: bold;
+    color: #666;
+    font-size: 13px;
+}
+
+.performance-cell {
+    flex: 1;
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* 历史净值表格 */
+.netvalue-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.netvalue-row {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.netvalue-row:last-child {
+    border-bottom: none;
+}
+
+.netvalue-row.header-row {
+    font-weight: bold;
+    color: #666;
+    font-size: 13px;
+}
+
+.netvalue-cell {
+    flex: 1;
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* 正负值颜色 */
+.positive {
+    color: #E53935; /* 红色表示正收益 */
+}
+
+.negative {
+    color: #4CAF50; /* 绿色表示负收益 */
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .weekly-returns-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .loading {
+        grid-column: span 2;
+    }
+}
