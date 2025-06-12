@@ -11,5 +11,11 @@ wheels/
 
 # Cache
 cache/
+.cache/
 .vercel
 .DS_Store
+
+# Data
+*.pkl
+*.csv
+*.xlsx
