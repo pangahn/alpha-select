@@ -4,7 +4,14 @@ from datetime import timedelta
 from typing import Any, Dict, List
 
 import cachetools.func
+import pandas as pd
 import requests
+from cachetools import cached
+
+from ..utils.cache_utils import FileCache
+from .akshare_api import get_fund_info
+
+cache = FileCache(ttl=timedelta(hours=24))
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +21,7 @@ TIANTIAN_HEADERS = {
 }
 
 
-@cachetools.func.ttl_cache(maxsize=128, ttl=timedelta(hours=24).total_seconds())
+@cached(cache=cache, key=lambda fund_code: f"get_bond_investment_distribution__{fund_code}")
 def get_bond_investment_distribution(fund_code: str) -> dict:
     """获取债券基金券种分布数据
         {
@@ -72,8 +79,8 @@ def get_bond_investment_distribution(fund_code: str) -> dict:
     return result
 
 
-@cachetools.func.ttl_cache(maxsize=128, ttl=timedelta(hours=24).total_seconds())
-def get_asset_allocation(fund_code: str) -> dict:
+@cached(cache=cache, key=lambda fund_code: f"get_fund_asset_allocation__{fund_code}")
+def get_fund_asset_allocation(fund_code: str) -> dict:
     """获取资产分类分布数据
     {
     "data": [
@@ -123,5 +130,78 @@ def get_fund_distribution(fund_code: str) -> dict:
     """获取基金券种分布和资产分类分布数据"""
     result = {"基金代码": fund_code}
     result.update(get_bond_investment_distribution(fund_code))
-    result.update(get_asset_allocation(fund_code))
+    result.update(get_fund_asset_allocation(fund_code))
     return result
+
+
+def _process_money_fund_values(fund_code: str, content: dict):
+    """
+    处理货币基金净值数据
+
+    Parameters
+    ----------
+    fund_code : str
+        基金代码，例如"004898"
+    content : dict
+        包含基金净值数据的字典
+
+    Returns
+    -------
+    pd.DataFrame
+        包含基金净值数据的DataFrame
+        列包括：基金代码、净值日期、每万份收益、7日年化收益率
+    """
+    if content.get("totalCount", 0) == 0:
+        logger.warning(f"货币型基金{fund_code}数据缺失.")
+        df = pd.DataFrame(columns=["基金代码", "净值日期", "每万份收益", "7日年化收益率"])
+        df = df.astype({"基金代码": "str", "净值日期": "str", "每万份收益": "float64", "7日年化收益率": "float64"})
+        return df
+
+    df = (
+        pd.DataFrame(content["data"])[["FSRQ", "DWJZ", "LJJZ"]]
+        .rename(columns={"FSRQ": "净值日期", "DWJZ": "每万份收益", "LJJZ": "7日年化收益率"})
+        .sort_values(by=["净值日期"], ascending=True)
+        .reset_index(drop=True)
+    )
+
+    df["每万份收益"] = pd.to_numeric(df["每万份收益"], errors="coerce")
+    df["7日年化收益率"] = pd.to_numeric(df["7日年化收益率"], errors="coerce")
+    df["净值日期"] = pd.to_datetime(df["净值日期"], errors="coerce")
+
+    df.insert(0, "基金代码", fund_code)
+    return df
+
+
+@cached(cache=cache, key=lambda fund_code: f"get_fund_values__{fund_code}")
+def get_fund_values(fund_code: str):
+    url = "https://fundcomapi.tiantianfunds.com/mm/newCore/FundVPageDiagram"
+    params = {"FCODE": fund_code, "RANGE": "ln"}
+    response = requests.get(url, params=params, headers=TIANTIAN_HEADERS)
+    content = response.json()
+
+    fund_info = get_fund_info(fund_code)
+    fund_type = fund_info["基金类型"]
+
+    if "货币型" in fund_type:
+        return _process_money_fund_values(fund_code, content)
+
+    if content.get("totalCount", 0) == 0:
+        logger.warning(f"基金{fund_code}净值数据缺失.")
+        df = pd.DataFrame(columns=["基金代码", "净值日期", "单位净值", "累计净值"])
+        df = df.astype({"基金代码": "str", "净值日期": "str", "单位净值": "float64", "累计净值": "float64"})
+        return df
+
+    df = (
+        pd.DataFrame(content["data"])[["FSRQ", "DWJZ", "LJJZ"]]
+        .rename(columns={"FSRQ": "净值日期", "DWJZ": "单位净值", "LJJZ": "累计净值"})
+        .sort_values(by=["净值日期"], ascending=True)
+        .reset_index(drop=True)
+    )
+
+    df["单位净值"] = pd.to_numeric(df["单位净值"], errors="coerce")
+    df["累计净值"] = pd.to_numeric(df["累计净值"], errors="coerce")
+    df["净值日期"] = pd.to_datetime(df["净值日期"], errors="coerce")
+
+    df.insert(0, "基金代码", fund_code)
+
+    return df

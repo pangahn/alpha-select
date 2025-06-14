@@ -5,7 +5,7 @@ import pickle
 import time
 from datetime import timedelta
 from pathlib import Path
-from typing import Any, Union
+from typing import Any, Dict, Union
 
 from cachetools import Cache
 
@@ -27,8 +27,8 @@ class FileCache(Cache):
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
     def _get_cache_path(self, key: Any) -> Path:
-        key_hash = hashlib.md5(str(key).encode()).hexdigest()
-        return self.cache_dir / f"{key_hash}.pkl"
+        prefix = key.split("__")[0]
+        return self.cache_dir / f"{prefix}.pkl"
 
     def __getitem__(self, key):
         path = self._get_cache_path(key)
@@ -40,12 +40,31 @@ class FileCache(Cache):
             raise KeyError(key)
 
         with open(path, "rb") as f:
-            return pickle.load(f)
+            obj: Dict[str, Any] = pickle.load(f)
+
+        if "__" in key:
+            _code = key.split("__")[1]
+            if _code not in obj:
+                raise KeyError(key)
+            return obj[_code]
+
+        return obj
 
     def __setitem__(self, key, value):
         path = self._get_cache_path(key)
+
+        if "__" in key:
+            cache_data = {}
+            if path.exists():
+                with open(path, "rb") as f:
+                    cache_data = pickle.load(f)
+
+            cache_data[key.split("__")[1]] = value
+        else:
+            cache_data = value
+
         with open(path, "wb") as f:
-            pickle.dump(value, f)
+            pickle.dump(cache_data, f)
 
     def __delitem__(self, key):
         path = self._get_cache_path(key)
